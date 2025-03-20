@@ -6,8 +6,15 @@
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image-aframe.prod.js"></script>
   </head>
   <body>
+    <script>
+      // Forza la richiesta di accesso alla fotocamera
+      navigator.mediaDevices.getUserMedia({ video: true })
+        .then(() => console.log("Accesso alla fotocamera garantito"))
+        .catch(error => console.error("Errore accesso fotocamera:", error));
+    </script>
+
     <a-scene 
-      mindar-image="imageTargetSrc: targets.mind; autoStart: true;" 
+      mindar-image="imageTargetSrc: https://TUO_USERNAME.github.io/NOME_REPO/targets.mind; autoStart: true;" 
       embedded 
       vr-mode-ui="enabled: false" 
       device-orientation-permission-ui="enabled: true">
