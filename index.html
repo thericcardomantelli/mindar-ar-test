@@ -10,25 +10,27 @@
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
-    <script>
-        async function startAR() {
-            try {
-                // Richiede il permesso per la fotocamera
-                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-                console.log("✅ Accesso alla fotocamera garantito");
+  <script>
+  async function startAR() {
+      try {
+          const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+          console.log("✅ Accesso alla fotocamera garantito");
+          document.getElementById("startButton").style.display = "none";
+          document.getElementById("ar-scene").style.display = "block";
 
-                // Nasconde il pulsante e avvia AR
-                document.getElementById("startButton").style.display = "none";
-                document.getElementById("ar-scene").style.display = "block";
+          // Forza l'avvio di MindAR
+          setTimeout(() => {
+              const scene = document.getElementById("ar-scene");
+              scene.components["mindar-image"].start();
+              console.log("🚀 MindAR avviato!");
+          }, 500);
+      } catch (error) {
+          console.error("❌ Errore accesso alla fotocamera:", error);
+          alert("Devi concedere il permesso alla fotocamera per usare la realtà aumentata.");
+      }
+  }
+</script>
 
-                // Riassegna MindAR per forzare la visualizzazione
-                document.getElementById("ar-scene").components["mindar-image"].start();
-            } catch (error) {
-                console.error("❌ Errore accesso alla fotocamera:", error);
-                alert("Devi concedere il permesso alla fotocamera per usare la realtà aumentata.");
-            }
-        }
-    </script>
 </head>
 
 <body style="margin: 0; overflow: hidden;">
