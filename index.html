@@ -1,29 +1,52 @@
-<html>
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MindAR AR Test</title>
+
+    <!-- MindAR e A-Frame -->
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image.prod.js"></script>
     <script src="https://aframe.io/releases/1.5.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/dist/mindar-image-aframe.prod.js"></script>
-  </head>
-  <body>
+
     <script>
-      // Forza la richiesta di accesso alla fotocamera
-      navigator.mediaDevices.getUserMedia({ video: true })
-        .then(() => console.log("Accesso alla fotocamera garantito"))
-        .catch(error => console.error("Errore accesso fotocamera:", error));
+        // Funzione per richiedere i permessi della fotocamera
+        async function requestCameraAccess() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                console.log("Accesso alla fotocamera garantito");
+                stream.getTracks().forEach(track => track.stop()); // Spegne la camera dopo il test
+                document.getElementById("startButton").style.display = "none"; // Nasconde il pulsante
+                document.getElementById("ar-scene").style.display = "block"; // Mostra la scena AR
+            } catch (error) {
+                console.error("Accesso negato alla fotocamera:", error);
+                alert("Devi consentire l'accesso alla fotocamera per utilizzare questa esperienza AR.");
+            }
+        }
     </script>
+</head>
 
+<body style="margin: 0; overflow: hidden;">
+    <!-- Pulsante per richiedere il permesso della fotocamera -->
+    <button id="startButton" onclick="requestCameraAccess();" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 15px 25px; font-size: 18px; cursor: pointer; z-index: 1000;">
+        Attiva Fotocamera
+    </button>
+
+    <!-- Scena AR (inizialmente nascosta fino a che non si attiva la fotocamera) -->
     <a-scene 
-      mindar-image="imageTargetSrc: https://TUO_USERNAME.github.io/NOME_REPO/targets.mind; autoStart: true;" 
-      embedded 
-      vr-mode-ui="enabled: false" 
-      device-orientation-permission-ui="enabled: true">
-      
-      <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+        id="ar-scene"
+        mindar-image="imageTargetSrc: targets.mind; autoStart: true;"
+        embedded
+        vr-mode-ui="enabled: false"
+        device-orientation-permission-ui="enabled: true"
+        style="display: none;">
+        
+        <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0">
-        <a-plane color="blue" opacity="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
-      </a-entity>
+        <a-entity mindar-image-target="targetIndex: 0">
+            <a-plane color="blue" opacity="0.5" position="0 0 0" height="0.552" width="1" rotation="0 0 0"></a-plane>
+        </a-entity>
     </a-scene>
-  </body>
+</body>
 </html>
